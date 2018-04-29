@@ -85,16 +85,44 @@ getAjaxData(spaceXLaunchesURL, function(launches) {
 });
 
 
-const api_key = '2FuF3E9nyFeXWt3aHIfkxtKTUGn73v0w';
-const query = 'smile';
-const giphyUrl = 'http://api.giphy.com/v1/gifs/search?api_key=' + api_key + '&q=' + query;
+const searchButton = document.querySelector('#search');
+const searchInput = document.querySelector('#gifSearchText');
 
-getAjaxData(giphyUrl, function(searchResults) {
+searchButton.addEventListener('click', function() {
 
-    console.log(searchResults);
+    searchGifs(searchInput.value);
 
-    console.log(searchResults.data[0].images.original.url)
 });
+
+
+function searchGifs(query) {
+
+    const api_key = '2FuF3E9nyFeXWt3aHIfkxtKTUGn73v0w';
+    const giphyUrl = 'http://api.giphy.com/v1/gifs/search?api_key=' + api_key + '&q=' + query;
+
+    getAjaxData(giphyUrl, function(searchResults) {
+
+        console.log(searchResults);
+
+        console.log(searchResults.data[0].images.original.url);
+
+        const ul = document.querySelector('.gif-images');
+        ul.innerHTML = "";
+
+        for (const gif of searchResults.data) {
+            const gifURL = gif.images.original.url;
+
+            const li = document.createElement('li');
+            ul.appendChild(li);
+
+            li.innerHTML = `<img src="${gifURL}">`;
+
+            // console.log(gifURL);
+        }
+
+    });
+}
+
 
 /* Exercise 3
 
